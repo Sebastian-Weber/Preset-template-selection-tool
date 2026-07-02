@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google Analytics 4 only after consent -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+
+    function loadGA4() {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-64KGYY639W';
+      document.head.appendChild(s);
+      gtag('js', new Date());
+      gtag('config', 'G-64KGYY639W');
+    }
+
+    if (localStorage.getItem('ga_consent') === 'granted') {
+      loadGA4();
+    }
+  </script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="sw_favicon32.svg">
+  <title>Case Study: Preset-Based Template Selection | Sebastian Weber</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dark: #0F1117; --coral: #E06040; --coral-bg: #FDF0EC;
+      --white: #FFFFFF; --paper: #FAFAFA; --text: #1A1A1A;
+      --muted: #7A7A7A; --border: #E0DEDA; --border-light: #EEECE8; --neutral: #F4F2EF;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Montserrat', system-ui, sans-serif; background: var(--paper); color: var(--text); line-height: 1.7; }
+    #progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--coral); width: 0%; transition: width 0.1s; z-index: 100; }
+    nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(250,250,250,0.94); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 56px; }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 500; transition: color 0.15s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-tag-coral { background: var(--coral-bg); color: var(--coral); padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; pointer-events: none; }
+    .nav-cta { background: var(--coral); color: var(--white) !important; padding: 7px 16px; border-radius: 7px; font-size: 13px !important; font-weight: 600 !important; transition: background 0.15s; }
+    .nav-cta:hover { background: #E88F71 !important; }
+    .hero { padding: 140px 48px 80px; max-width: 720px; margin: 0 auto; }
+    .hero-label { font-size: 11px; font-weight: 600; color: var(--coral); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .hero-label::before { content: ''; display: block; width: 32px; height: 1.5px; background: var(--coral); }
+    h1 { font-size: clamp(28px, 4vw, 48px); font-weight: 700; line-height: 1.15; color: var(--dark); margin-bottom: 16px; letter-spacing: -0.01em; }
+    .hero-sub { font-size: 20px; color: var(--muted); font-style: italic; max-width: 580px; line-height: 1.65; margin-bottom: 40px; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 24px; }
+    .meta-item { display: flex; flex-direction: column; gap: 3px; }
+    .meta-box { display: flex; border: 1.5px dashed var(--border); border-radius: 16px; padding: 28px 40px; justify-content: space-around; flex-wrap: wrap; gap: 24px; margin-top: 32px; }
+    .meta-col { text-align: center; min-width: 140px; }
+    .meta-label-box { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dark); margin-bottom: 10px; }
+    .meta-value-box { font-size: 14px; color: var(--text); line-height: 1.5; }
+    .meta-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    .meta-value { font-size: 13px; color: var(--text); font-weight: 500; }
+    .content { max-width: 720px; margin: 0 auto; padding: 0 48px 120px; }
+    .block { padding: 64px 0; border-top: 1px solid var(--border); opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .block.visible { opacity: 1; transform: translateY(0); }
+    .block-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--coral); margin-bottom: 16px; }
+    h2 { font-size: 22px; font-weight: 700; color: var(--dark); margin-bottom: 20px; letter-spacing: -0.01em; line-height: 1.3; }
+    p { font-size: 15px; color: var(--text); margin-bottom: 18px; line-height: 1.75; }
+    .callout { background: #F5E5E0; color: var(--dark); padding: 24px 28px; border-radius: 12px; margin: 32px 0; font-style: italic; font-size: 18px; line-height: 1.5; font-weight: 300; border-left: 4px solid #C87255; }
+    .img-block { margin: 28px 0; }
+    .img-block img { width: 100%; border-radius: 10px; border: 1px solid var(--border); display: block; }
+    .img-caption { font-size: 11px; color: var(--muted); margin-top: 8px; font-weight: 500; letter-spacing: 0.04em; }
+    .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 28px 0; }
+    .img-grid-item img { width: 100%; border-radius: 10px; border: 1px solid var(--border); display: block; }
+    .img-grid-item .img-caption { font-size: 11px; color: var(--muted); margin-top: 8px; font-weight: 500; }
+    .process { display: grid; gap: 16px; margin: 28px 0; }
+    .process-step { background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; padding: 22px 24px; display: grid; grid-template-columns: 40px 1fr; gap: 16px; align-items: start; }
+    .step-num { width: 40px; height: 40px; border-radius: 10px; background: var(--coral); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; flex-shrink: 0; }
+    .step-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--dark); }
+    .step-body { font-size: 13px; color: var(--muted); line-height: 1.65; margin: 0; }
+    .disclaimer { background: var(--neutral); border-radius: 10px; padding: 20px 24px; margin: 28px 0; font-size: 13px; color: var(--muted); line-height: 1.65; border-left: 3px solid var(--border); }
+    .cta-block { background: #F2E6E3; border-radius: 16px; padding: 48px; text-align: center; margin-top: 80px; }
+    .cta-block h2 { color: #1A1A1A; margin-bottom: 12px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; background: var(--coral); color: var(--white); padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.15s; }
+    .btn:hover { background: #E88F71; color: var(--white); }
+    footer { border-top: 1px solid var(--border); padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; max-width: 860px; margin: 0 auto; }
+    footer p { font-size: 12px; color: var(--muted); margin: 0; }
+
+    /* Cookie Banner */
+    #cookie-banner {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%);
+      background: #0F1117; color: #fff;
+      padding: 16px 24px; border-radius: 12px;
+      display: flex; align-items: center; gap: 16px;
+      z-index: 200; font-size: 13px;
+      max-width: 560px; width: calc(100% - 48px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    #cookie-banner p { margin: 0; flex: 1; color: #ccc; line-height: 1.5; }
+    #cookie-banner a { color: #fff; }
+    .cookie-btn { padding: 8px 16px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; white-space: nowrap; font-family: inherit; }
+    .cookie-accept { background: var(--coral); color: #fff; }
+    .cookie-decline { background: transparent; color: #ccc; border: 1px solid #555 !important; }
+
+    @media (max-width: 860px) {
+      nav { padding: 0 20px; } .hero { padding: 120px 20px 60px; } .content { padding: 0 20px 80px; }
+      .nav-links { display: none; } footer { padding: 24px 20px; flex-direction: column; gap: 8px; text-align: center; }
+      .img-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="progress"></div>
+
+  <div id="cookie-banner" style="display:none;">
+    <p>This site uses Google Analytics. <a href="https://sebastian-weber.github.io/uxui-portfolio/datenschutz.html" target="_blank">Privacy Policy</a></p>
+    <button class="cookie-btn cookie-decline" onclick="decideConsent(false)">Decline</button>
+    <button class="cookie-btn cookie-accept" onclick="decideConsent(true)">Accept</button>
+  </div>
+
+  <nav>
+    <a href="index.html" class="nav-logo" style="display:flex;align-items:center;line-height:0;margin-right:8px;"><svg width="40" height="40" style="display:block;margin-top:-2px;" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 19.0413V20.7092L15.9986 26.8336V25.3991L11.7131 23.7928V23.7848L10.3368 23.2366L1.51283 19.9819L10.3384 16.7504V16.7576L11.7146 16.2587L16.0001 14.6524V13.1113L0 19.0413Z" fill="#0F1117"/><path d="M16.0001 24.0696V22.4023L0 16.2773V17.7113L4.2859 19.317V19.3279L5.66227 19.8759L14.4871 23.1294L5.66227 26.3619V26.3546L4.2859 26.8534L0 28.4591V29.9996L16.0001 24.0696Z" fill="#0F1117"/><path d="M20.3237 26.8333H22.1382L28.8006 11H27.2401L25.4927 15.242H25.4809L24.8844 16.6032L21.3438 25.3361L17.826 16.6032H17.8339L17.2911 15.242L15.5436 11H13.8672L20.3237 26.8333Z" fill="#0F1117"/><path d="M23.5229 26.8333H25.3374L31.9998 11H30.4394L28.6919 15.2418H28.6801L28.0837 16.603L24.543 25.3354L21.0252 16.603H21.0331L20.4903 15.2418L18.7429 11H17.0664L23.5229 26.8333Z" fill="#0F1117"/></svg></a>
+    <ul class="nav-links">
+      <li><span class="nav-tag-coral">Case Study</span></li>
+      <li><a href="#kontext">Context</a></li>
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#prozess">Process</a></li>
+      <li><a href="#ergebnis">Result</a></li>
+      <li><a href="https://sebastian-weber.github.io/uxui-portfolio/" class="nav-cta">All Projects &rarr;</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-label">Case Study</div>
+    <h1>From Ambiguous Choice to Curated Presets</h1>
+    <p class="hero-sub">How I designed a selection of preset options so users make the right choice before they click.</p>
+    <div class="meta-box">
+      <div class="meta-col">
+        <div class="meta-label-box">Domain</div>
+        <div class="meta-value-box">Enterprise SaaS<br>Presentation Software Add-in</div>
+      </div>
+      <div class="meta-col">
+        <div class="meta-label-box">My Role</div>
+        <div class="meta-value-box">Associate UI Designer<br>Ideation to Markup Language</div>
+      </div>
+      <div class="meta-col">
+        <div class="meta-label-box">Team</div>
+        <div class="meta-value-box">CEO, Product Owner<br>Stakeholder, Developer</div>
+      </div>
+      <div class="meta-col">
+        <div class="meta-label-box">Timeline</div>
+        <div class="meta-value-box">2022</div>
+      </div>
+    </div>
+  </section>
+
+  <main class="content">
+
+    <section class="block" style="border-top: none; padding-top: 0;">
+      <div style="background: var(--neutral); border-radius: 12px; padding: 28px 32px; border-left: 4px solid var(--coral);">
+        <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--coral); margin-bottom: 14px;">My role in five sentences</div>
+        <ul style="margin-bottom: 16px; padding-left: 20px; font-size: 15px; line-height: 1.75;">
+          <li>Developed the terminology architecture through four iterations, moving from an action-based model to a preset model.</li>
+          <li>Derived the collapse pattern from DeepL as a UI reference.</li>
+          <li>Made the technical decision to use a ListBox instead of RadioButtons.</li>
+          <li>Wrote and aligned the German UI copy.</li>
+          <li>Carried out the redesign in direct coordination with an international partner company, from the first sketch to the XAML implementation.</li>
+        </ul>
+        <div style="font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 12px;">For confidentiality reasons, the company name and UI screenshots have been replaced with mockups and generic descriptions in this version. The process, sketches, and design decisions remain unchanged and original.</div>
+      </div>
+    </section>
+
+    <section class="block" id="kontext">
+      <div class="block-label">01 · Context</div>
+      <h2>The purpose of preset-based template selection</h2>
+      <p>The product is a B2B add-in for a presentation software suite. Its template feature updates slides from an outdated corporate design to a new one, automatically adjusting layouts, fonts, and colors. The target audience: individual users and small teams without dedicated design resources.</p>
+    </section>
+
+    <section class="block" id="problem">
+      <div class="block-label">02 · The Problem</div>
+      <h2>All or Nothing: A Choice Without Guidance</h2>
+      <p>The preset decision sat at a single dialog with no room for error correction. Getting it wrong meant manual rework, exactly the effort the feature was meant to eliminate. I identified two structural issues with the existing design:</p>
+      <p><strong>The dialog offered no differentiation.</strong> Two unnamed options, no description of consequences, no way to judge which fit a given task.</p>
+      <p><strong>The dialog didn't scale with the underlying logic.</strong> Four distinct preset scenarios existed technically, but the two-option UI couldn't represent that complexity without becoming a menu.</p>
+      <div class="img-block">
+        <img src="img/mockup-preset-tool-before.png" alt="Mockup of the old dialog with two radio buttons, without a description of the consequences">
+        <div class="img-caption">Before · dialog with two radio buttons (mockup, not the original UI)</div>
+      </div>
+    </section>
+
+    <section class="block" id="prozess">
+      <div class="block-label">03 · Process</div>
+      <h2>Ideation, Iteration, Implementation</h2>
+      <p>The starting point for the redesign was the product decision to use tiles instead of radio buttons to represent the preset options. This idea didn't come from user research but from a marketing consideration, communicated via the CEO and a business partner. The task was to design what the tiles would communicate, how they would differ from each other, and what belonged in the expander — and then implement it in XAML.</p>
+
+      <div class="process">
+        <div class="process-step">
+          <div class="step-num">1</div>
+          <div>
+            <div class="step-title">Quantity: four down to three</div>
+            <p class="step-body">The first sketch called for four tiles: "Full Conversion", "Light Conversion with resize", "Light Conversion without resize", and "Custom Conversion". The model was complete but too complex for a quick decision. The fourth level had the rarest use case. The solution: don't remove it, hide it. Three tiles for the three most common scenarios, with the remaining options moved into an expander.</p>
+            <div class="img-block" style="margin: 16px 0 0;">
+              <img src="img/sketch-01-four-options-ideation.jpg" alt="Hand-drawn sketch on graph paper: four options stacked as a radio button list">
+              <div class="img-caption">First sketch · four preset options with tooltip panel</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-num">2</div>
+          <div>
+            <div class="step-title">Language: four iterations toward the right mental model</div>
+            <p class="step-body">Iteration 1 was action-based: "Fully Convert / Resize Only / No Change". This describes what the system does, not what the user gets.</p>
+            <p class="step-body" style="margin-top: 10px;">Iteration 2 shifted to a goal-oriented perspective: "Apply Template only / Change Template &amp; Cleanup / Ensure Corporate Consistency". Conceptually a step forward, but too abstract and too close to marketing language.</p>
+            <p class="step-body" style="margin-top: 10px;">Iteration 3 tried a spectrum: "Low / Medium / High". The user has to calibrate for themselves what "Medium" means for their slides.</p>
+            <p class="step-body" style="margin-top: 10px;">Iteration 4 replaced the spectrum with presets: "Basic / Medium / Full". The user trusts a curated preselection instead of calibrating it themselves. The final naming was finalized in coordination with the product team.</p>
+            <div class="img-grid" style="margin: 16px 0 0;">
+              <div class="img-grid-item">
+                <img src="img/sketch-07-notepad-fully-convert-resize-no-changes-apply-cancel.jpg" alt="Hand-drawn sketch: three tiles — Fully Convert, Resize Only, No Changes">
+                <div class="img-caption">Iteration 1 · action-based naming</div>
+              </div>
+              <div class="img-grid-item">
+                <img src="img/note-zielorientierte-benennung-apply-template-change-template-ensure-consistency.jpg" alt="Handwritten note with goal-oriented phrasing">
+                <div class="img-caption">Iteration 2 · goal-oriented naming</div>
+              </div>
+            </div>
+            <div class="img-block" style="margin: 16px 0 0;">
+              <img src="img/1000132019.jpg" alt="Hand-drawn notebook page with wording iterations">
+              <div class="img-caption">Iteration 3 &amp; 4 · wording iteration · Aug 3, 2023 · discarded variants and final naming</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-num">3</div>
+          <div>
+            <div class="step-title">Structure and implementation</div>
+            <p class="step-body">Two variants were developed for the hidden settings: tab navigation and an expander. Tabs were discarded early on, since they suggest equally weighted alternatives. An expander signals: these options exist, but you probably don't need them. The reference was DeepL, whose interface hides rarely used options in a similar way.</p>
+            <p class="step-body" style="margin-top: 10px;">The key technical decision: a ListBox instead of RadioButtons. In WPF, RadioButtons are a native control with a fixed visual language that can't be restyled into a tile with an icon, title, and bullet points. A ListBox is a container for arbitrary DataTemplates: each tile as its own DataTemplate, with icon, description text, and hover state, all in XAML without code-behind. Implemented on a feature branch in the .NET codebase.</p>
+            <div class="img-grid" style="margin: 16px 0 0;">
+              <div class="img-grid-item">
+                <img src="img/sketch-06-window-wireframe-three-tiles-advanced-settings.jpg" alt="Hand-drawn sketch: window wireframe with three tiles and an Advanced Settings expander">
+                <div class="img-caption">Expander solution · Advanced Settings collapsed</div>
+              </div>
+              <div class="img-grid-item">
+                <img src="img/1000132013.jpg" alt="Hand-drawn sketch with technical definitions of the three tiles">
+                <div class="img-caption">Technical definitions · each tile with a precise description</div>
+              </div>
+            </div>
+            <div class="img-block" style="margin: 16px 0 0;">
+              <img src="img/1000132015.jpg" alt="Hand-drawn sketch: hover animations with before/after states">
+              <div class="img-caption">Hover animation · before/after states of slide elements</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="ergebnis">
+      <div class="block-label">04 · Result</div>
+      <h2>The final UI</h2>
+      <p>The prototype was approved internally. The final version carries the structural principle of the design: three named escalation levels with an expander for advanced options. The XAML implementation was a shared effort: window infrastructure was handled by development, while UI content, icons as DataTemplates, layout, and styles were implemented independently.</p>
+      <div class="callout">"will be super helpful for all situations."<br><span style="font-size: 13px; font-style: normal; font-weight: 500; color: var(--muted);">Feedback from the user test before launch</span></div>
+      <div class="img-block">
+        <img src="img/mockup-preset-tool-after.png" alt="Mockup of the final dialog with three tiles: Basic, Medium, and Full">
+        <div class="img-caption">After · dialog with three tiles — Basic / Medium / Full — and expander (mockup, not the original UI)</div>
+      </div>
+      <p>To my knowledge, no formal usability tests were conducted. The result is supported qualitatively: positive sign-off internally and from sales, with the feature in production since release.</p>
+      <div class="disclaimer">
+        For confidentiality reasons, the product name, screenshots, and manual references have been replaced with mockups and generic descriptions in this version. The sketches shown and the design process described remain unchanged and original.
+      </div>
+    </section>
+
+    <div class="cta-block">
+      <h2>All Projects</h2>
+      <a href="https://sebastian-weber.github.io/uxui-portfolio/" class="btn">To the project overview &rarr;</a>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>Sebastian Weber · UI Designer · Design-to-Code · Cologne 2026</p>
+    <p><a href="https://linkedin.com/in/sebastian-weber1708" style="color: var(--muted); text-decoration: none;">LinkedIn</a> · <a href="https://sebastian-weber.github.io/uxui-portfolio/datenschutz.html" style="color: var(--muted); text-decoration: none;">Legal Notice &amp; Privacy Policy</a></p>
+  </footer>
+
+  <script>
+    function decideConsent(accepted) {
+      document.getElementById('cookie-banner').style.display = 'none';
+      if (accepted) {
+        localStorage.setItem('ga_consent', 'granted');
+        loadGA4();
+      } else {
+        localStorage.setItem('ga_consent', 'denied');
+      }
+    }
+    if (!localStorage.getItem('ga_consent')) {
+      document.getElementById('cookie-banner').style.display = 'flex';
+    }
+
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const total = document.body.scrollHeight - window.innerHeight;
+      document.getElementById('progress').style.width = (scrolled / total * 100) + '%';
+    });
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.block').forEach(b => observer.observe(b));
+  </script>
+</body>
+</html>
