@@ -51,8 +51,6 @@
     .hero-sub { font-size: 20px; color: var(--muted); font-style: italic; max-width: 580px; line-height: 1.65; margin-bottom: 40px; }
     .meta-row { display: flex; flex-wrap: wrap; gap: 24px; }
     .meta-item { display: flex; flex-direction: column; gap: 3px; }
-    .hero-image { margin-top: 40px; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: var(--white); box-shadow: 0 16px 40px rgba(15,17,23,0.06); }
-    .hero-image img { width: 100%; display: block; }
     .meta-box { display: flex; border: 1.5px dashed var(--border); border-radius: 16px; padding: 28px 40px; justify-content: space-around; flex-wrap: wrap; gap: 24px; margin-top: 32px; }
     .meta-col { text-align: center; min-width: 140px; }
     .meta-label-box { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dark); margin-bottom: 10px; }
@@ -134,9 +132,6 @@
     <div class="hero-label">Case Study</div>
     <h1>From Ambiguous Choice to Curated Presets</h1>
     <p class="hero-sub">How I designed a selection of preset options so users make the right choice before they click.</p>
-    <div class="hero-image">
-      <img src="img/01_mockup_update_layout_before-after.png" alt="Hand-drawn sketch: hover animations with before/after states">
-    </div>
     <div class="meta-box">
       <div class="meta-col">
         <div class="meta-label-box">Domain</div>
@@ -186,7 +181,7 @@
       <p><strong>The dialog offered no differentiation.</strong> Two unnamed options, no description of consequences, no way to judge which fit a given task.</p>
       <p><strong>The dialog didn't scale with the underlying logic.</strong> Four distinct preset scenarios existed technically, but the two-option UI couldn't represent that complexity without becoming a menu.</p>
       <div class="img-block">
-        <img src="img/01_mockup_update_layout_before.png" alt="Mockup of the old dialog with two radio buttons, without a description of the consequences">
+        <img src="img/01_mockup_preset_tool_before.png" alt="Mockup of the old dialog with two radio buttons, without a description of the consequences">
         <div class="img-caption">Before · dialog with two radio buttons (mockup, not the original UI)</div>
       </div>
     </section>
@@ -194,102 +189,65 @@
     <section class="block" id="prozess">
       <div class="block-label">03 · Process</div>
       <h2>Ideation, Iteration, Implementation</h2>
-      <p>The starting point for the redesign was the product decision to use tiles instead of radio buttons to represent the preset options. This idea didn't come from user research but from a marketing consideration, communicated via the CEO and a business partner. The task was to design what the tiles would communicate, how they would differ from each other, and what belonged in the expander — and then implement it in XAML.</p>      
+      <p>The starting point for the redesign was the product decision to use tiles instead of radio buttons to represent the preset options. This idea didn't come from user research but from a marketing consideration, communicated via the CEO and a business partner. The task was to design what the tiles would communicate, how they would differ from each other, and what belonged in the expander — and then implement it in XAML.</p>
 
       <div class="process">
         <div class="process-step">
           <div class="step-num">1</div>
           <div>
-            <div class="step-title">The four distinct preset scenarios</div>
-            <p class="step-body">The first sketch called for four tiles: "Full Adjustment", "Light Adjustment with resize", "Light Adjustment without resize", and "Custom Adjustment". The model was complete but too complex for a quick decision.</p>
+            <div class="step-title">Quantity: four down to three</div>
+            <p class="step-body">The first sketch called for four tiles: "Full Conversion", "Light Conversion with resize", "Light Conversion without resize", and "Custom Conversion". The model was complete but too complex for a quick decision. The fourth level had the rarest use case. The solution: don't remove it, hide it. Three tiles for the three most common scenarios, with the remaining options moved into an expander.</p>
             <div class="img-block" style="margin: 16px 0 0;">
-              <img src="img/03_mockup_four_tooltip_wireframe.png" alt="Hand-drawn sketch on graph paper: four options stacked as a radio button list">
+              <img src="img/02_first_scribble_wireframe.png" alt="Hand-drawn sketch on graph paper: four options stacked as a radio button list">
               <div class="img-caption">First sketch · four preset options with tooltip panel</div>
-            </div> 
-          </div>
-        </div>
-
-      <!-- <div class="process">
-        <div class="process-step">
-          <div class="step-num">2</div>
-          <div>
-            <div class="step-title">The four distinct preset scenarios</div>
-            <p class="step-body">The first sketch called for four tiles: "Full Adjustment", "Light Adjustment with resize", "Light Adjustment without resize", and "Custom Adjustment". The model was complete but too complex for a quick decision.</p>
-            <div class="img-block" style="margin: 16px 0 0;">
-              <img src="img/02_mockup_wording_iteration.png" alt="Hand-drawn sketch on graph paper: four options stacked as a radio button list">
-              <div class="img-caption">First sketch · four preset options with tooltip panel</div>
-            </div> 
-          </div>
-        </div> -->
-
-        <div class="process">
-        <div class="process-step">
-          <div class="step-num">2</div>
-          <div>
-            <div class="step-title">Designing a naming logic</div>
-            <p class="step-body">In this first attempt of replacing the "level-of-adjustment" naming logic with more action-based captions, three of out the four captions describe what the user does (action), one describes the result state, and "Update" itself is vague enough to describe both. This breaks Nielsen's "Consistency and Standards" heuristic (Nielsen Norman Group, 10 Usability Heuristics for User Interface Design, 1994).</p>
-            <div class="img-block" style="margin: 16px 0 0;">
-              <img src="img/table.png" alt="Hand-drawn sketch on graph paper: four options stacked as a radio button list">
-              <div class="img-caption">First sketch · four preset options with tooltip panel</div>
-            </div> 
-          </div>
-        </div>
-
-        <div class="process">
-          <div class="process-step">
-            <div class="step-num">3</div>
-            <div>
-              <div class="step-title">Fixing the inconsistencies</div>
-              <p class="step-body">The second iteration called for three tiles: "Full Update", "Resize Only", "Keep  Layout".</p>
-              <div class="img-block" style="margin: 16px 0 0;">
-                <img src="img/04_mockup_three_presets.png" alt="Hand-drawn sketch on graph paper: four options stacked as a radio button list">
-                <div class="img-caption">The fourth level had the rarest use case. The solution: don't remove it, hide it. Three tiles for the three most common scenarios.</div>
-              </div>
-              <p class="step-body" style="margin-top: 10px;">The next iteration shifted towards a goal-oriented perspective: "Apply Template only / Change Template &amp; Cleanup / Ensure Corporate Consistency". It was conceptually a step forward, but too abstract and too close to marketing language.</p>
-              <!-- <div class="img-block" style="margin: 16px 0 0;">
-                <img src="img/note-zielorientierte-benennung-apply-template-change-template-ensure-consistency.jpg" alt="Handwritten note with goal-oriented naming attempts">
-                <div class="img-caption">Goal-oriented naming attempt · discarded for being too abstract</div>
-              </div> -->
-              <div class="img-block" style="margin: 16px 0 0;">
-                <img src="img/04_mockup_state_the_objective.png" alt="Naming logic diagram: state the objective, three consistently named options">
-                <div class="img-caption">Naming logic · consistent by design, still discarded for being too close to marketing language</div>
-              </div>
             </div>
           </div>
+        </div>
 
         <div class="process-step">
-          <div class="step-num">4</div>
+          <div class="step-num">2</div>
           <div>
-            <div class="step-title">Structure: tabs vs. expander</div>
+            <div class="step-title">Language: four iterations toward the right mental model</div>
+            <p class="step-body">Iteration 1 was action-based: "Fully Convert / Resize Only / No Change". This describes what the system does, not what the user gets.</p>
+            <p class="step-body" style="margin-top: 10px;">Iteration 2 shifted to a goal-oriented perspective: "Apply Template only / Change Template &amp; Cleanup / Ensure Corporate Consistency". Conceptually a step forward, but too abstract and too close to marketing language.</p>
+            <p class="step-body" style="margin-top: 10px;">Iteration 3 tried a spectrum: "Low / Medium / High". The user has to calibrate for themselves what "Medium" means for their slides.</p>
+            <p class="step-body" style="margin-top: 10px;">Iteration 4 replaced the spectrum with presets: "Basic / Medium / Full". The user trusts a curated preselection instead of calibrating it themselves. The final naming was finalized in coordination with the product team.</p>
+            <div class="img-grid" style="margin: 16px 0 0;">
+              <div class="img-grid-item">
+                <img src="img/sketch-07-notepad-fully-convert-resize-no-changes-apply-cancel.jpg" alt="Hand-drawn sketch: three tiles — Fully Convert, Resize Only, No Changes">
+                <div class="img-caption">Iteration 1 · action-based naming</div>
+              </div>
+              <div class="img-grid-item">
+                <img src="img/note-zielorientierte-benennung-apply-template-change-template-ensure-consistency.jpg" alt="Handwritten note with goal-oriented phrasing">
+                <div class="img-caption">Iteration 2 · goal-oriented naming</div>
+              </div>
+            </div>
+            <div class="img-block" style="margin: 16px 0 0;">
+              <img src="img/1000132019.jpg" alt="Hand-drawn notebook page with wording iterations">
+              <div class="img-caption">Iteration 3 &amp; 4 · wording iteration · Aug 3, 2023 · discarded variants and final naming</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-num">3</div>
+          <div>
+            <div class="step-title">Structure and implementation</div>
             <p class="step-body">Two variants were developed for the hidden settings: tab navigation and an expander. Tabs were discarded early on, since they suggest equally weighted alternatives. An expander signals: these options exist, but you probably don't need them. The reference was DeepL, whose interface hides rarely used options in a similar way.</p>
+            <p class="step-body" style="margin-top: 10px;">The key technical decision: a ListBox instead of RadioButtons. In WPF, RadioButtons are a native control with a fixed visual language that can't be restyled into a tile with an icon, title, and bullet points. A ListBox is a container for arbitrary DataTemplates: each tile as its own DataTemplate, with icon, description text, and hover state, all in XAML without code-behind. Implemented on a feature branch in the .NET codebase.</p>
+            <div class="img-grid" style="margin: 16px 0 0;">
+              <div class="img-grid-item">
+                <img src="img/sketch-06-window-wireframe-three-tiles-advanced-settings.jpg" alt="Hand-drawn sketch: window wireframe with three tiles and an Advanced Settings expander">
+                <div class="img-caption">Expander solution · Advanced Settings collapsed</div>
+              </div>
+              <div class="img-grid-item">
+                <img src="img/1000132013.jpg" alt="Hand-drawn sketch with technical definitions of the three tiles">
+                <div class="img-caption">Technical definitions · each tile with a precise description</div>
+              </div>
+            </div>
             <div class="img-block" style="margin: 16px 0 0;">
-              <img src="img/04_mockup_three_presets_cards.png" alt="Hand-drawn notebook page with wording iterations">
-              <div class="img-caption">Expander structure with three presets and hidden extended settings</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="process-step">
-          <div class="step-num">5</div>
-          <div>
-            <div class="step-title">Naming iteration: spectrum</div>
-            <p class="step-body">Iteration 3 tried a spectrum: "Low / Partial / High". The user has to calibrate for themselves what "Partial" means for their content.</p>
-              <div class="img-block" style="margin: 16px 0 0;">
-              <img src="img/04_mockup_specify_level_of_content_updates.png" alt="Hand-drawn notebook page with UI copy wording and translation notes">
-              <div class="img-caption">UI copy wording · basic, partial, full option sketches</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="process-step">
-
-          <div class="step-num">6</div>
-          <div>
-            <div class="step-title">Naming iteration: presets</div>
-            <p class="step-body">Iteration 4 replaced the spectrum with presets: "Basic / Medium / Full". The user trusts a curated preselection instead of calibrating it themselves. The final naming was finalized in coordination with the product team.</p>
-              <div class="img-block" style="margin: 16px 0 0;">
-              <img src="img/04_mockup_specify_presets.png" alt="Hand-drawn notebook page with UI copy wording and translation notes">
-              <div class="img-caption">Expander structure with three presets and hidden extended settings</div>
+              <img src="img/1000132015.jpg" alt="Hand-drawn sketch: hover animations with before/after states">
+              <div class="img-caption">Hover animation · before/after states of slide elements</div>
             </div>
           </div>
         </div>
@@ -299,10 +257,10 @@
     <section class="block" id="ergebnis">
       <div class="block-label">04 · Result</div>
       <h2>The final UI</h2>
-      <div class="callout">"will be super helpful for all situations."<br><span style="font-size: 13px; font-style: normal; font-weight: 500; color: var(--muted);">Feedback from the user test before launch</span></div>
       <p>The prototype was approved internally. The final version carries the structural principle of the design: three named escalation levels with an expander for advanced options. The XAML implementation was a shared effort: window infrastructure was handled by development, while UI content, icons as DataTemplates, layout, and styles were implemented independently.</p>
+      <div class="callout">"will be super helpful for all situations."<br><span style="font-size: 13px; font-style: normal; font-weight: 500; color: var(--muted);">Feedback from the user test before launch</span></div>
       <div class="img-block">
-        <img src="img/05_mockup_update_layout_after.png" alt="Mockup of the final dialog with three tiles: Basic, Medium, and Full">
+        <img src="img/mockup-preset-tool-after.png" alt="Mockup of the final dialog with three tiles: Basic, Medium, and Full">
         <div class="img-caption">After · dialog with three tiles — Basic / Medium / Full — and expander (mockup, not the original UI)</div>
       </div>
       <p>To my knowledge, no formal usability tests were conducted. The result is supported qualitatively: positive sign-off internally and from sales, with the feature in production since release.</p>
