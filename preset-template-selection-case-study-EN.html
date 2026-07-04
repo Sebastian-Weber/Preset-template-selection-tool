@@ -14,7 +14,7 @@
         maskAllInputs: true,
       },
       loaded: function (ph) {
-        if (!ph.has_opted_in_capturing() && !ph.has_opted_out_capturing()) {
+        if (ph.get_explicit_consent_status() === 'pending') {
           var banner = document.getElementById('cookie-banner');
           if (banner) banner.style.display = 'flex';
         }
@@ -211,19 +211,6 @@
           </div>
         </div>
 
-      <!-- <div class="process">
-        <div class="process-step">
-          <div class="step-num">2</div>
-          <div>
-            <div class="step-title">The four distinct preset scenarios</div>
-            <p class="step-body">The first sketch called for four tiles: "Full Adjustment", "Light Adjustment with resize", "Light Adjustment without resize", and "Custom Adjustment". The model was complete but too complex for a quick decision.</p>
-            <div class="img-block" style="margin: 16px 0 0;">
-              <img src="img/02_mockup_wording_iteration.png" alt="Hand-drawn sketch on graph paper: four options stacked as a radio button list">
-              <div class="img-caption">First sketch · four preset options with tooltip panel</div>
-            </div> 
-          </div>
-        </div> -->
-
         <div class="process">
         <div class="process-step">
           <div class="step-num">2</div>
@@ -248,10 +235,6 @@
                 <div class="img-caption">The fourth level had the rarest use case. The solution: don't remove it, hide it. Three tiles for the three most common scenarios.</div>
               </div>
               <p class="step-body" style="margin-top: 10px;">The next iteration shifted towards a goal-oriented perspective: "Apply Template only / Change Template &amp; Cleanup / Ensure Corporate Consistency". It was conceptually a step forward, but too abstract and too close to marketing language.</p>
-              <!-- <div class="img-block" style="margin: 16px 0 0;">
-                <img src="img/note-zielorientierte-benennung-apply-template-change-template-ensure-consistency.jpg" alt="Handwritten note with goal-oriented naming attempts">
-                <div class="img-caption">Goal-oriented naming attempt · discarded for being too abstract</div>
-              </div> -->
               <div class="img-block" style="margin: 16px 0 0;">
                 <img src="img/04_mockup_state_the_objective.png" alt="Naming logic diagram: state the objective, three consistently named options">
                 <div class="img-caption">Naming logic · consistent by design, still discarded for being too close to marketing language</div>
@@ -279,13 +262,6 @@
               <div class="img-block" style="margin: 16px 0 0;">
               <img src="img/04_mockup_specify_level_of_content_updates.png" alt="Hand-drawn notebook page with UI copy wording and translation notes">
               <div class="img-caption">UI copy wording · basic, partial, full option sketches</div>
-
-
-
-
-
-
-
             </div>
           </div>
         </div>
